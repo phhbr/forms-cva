@@ -1,45 +1,50 @@
-import {Component, forwardRef, OnInit} from '@angular/core';
+import {Component, forwardRef, Input, OnChanges, OnInit, SimpleChange, SimpleChanges} from '@angular/core';
 import {
+  AbstractControl,
   ControlValueAccessor,
   FormControl,
   FormGroup,
+  FormGroupDirective,
   NG_VALIDATORS,
   NG_VALUE_ACCESSOR,
+  NgForm,
   ValidationErrors,
   Validator,
   Validators
 } from '@angular/forms';
+import {ErrorStateMatcher} from '@angular/material';
+import {Address} from './address';
+
+class AddressErrorStateMatcher implements ErrorStateMatcher {
+  isErrorState(control: FormControl | null, form: FormGroupDirective | NgForm | null): boolean {
+    return control.invalid && control.touched;
+  }
+}
 
 @Component({
   selector: 'app-address',
   templateUrl: './address.component.html',
-  styleUrls: ['./address.component.scss'],
-  providers: [{
-    provide: NG_VALUE_ACCESSOR,
-    useExisting: forwardRef(() => AddressComponent),
-    multi: true
-  }, {
-    provide: NG_VALIDATORS,
-    useExisting: forwardRef(() => AddressComponent),
-    multi: true
-  }]
+  providers: [
+    {
+      provide: NG_VALUE_ACCESSOR,
+      useExisting: forwardRef(() => AddressComponent),
+      multi: true,
+    }, {
+      provide: NG_VALIDATORS,
+      useExisting: forwardRef(() => AddressComponent),
+      multi: true
+    },
+    {
+      provide: ErrorStateMatcher,
+      useClass: AddressErrorStateMatcher
+    }
+  ]
 })
-export class AddressComponent implements OnInit, ControlValueAccessor, Validator {
+export class AddressComponent implements OnInit, ControlValueAccessor, Validator, OnChanges {
   form: FormGroup;
+  @Input() isParentSubmitted: boolean;
 
   constructor() {
-    this.form = new FormGroup({
-      street: new FormControl('', {validators: Validators.required}),
-      zipCode: new FormControl('', {validators: Validators.required}),
-      city: new FormControl('', {validators: Validators.required}),
-    });
-  }
-
-  validate(control: FormGroup): ValidationErrors | null {
-    return this.form.valid ? null : {invalidForm: {valid: false, message: 'address form is invalid'}};
-  }
-
-  ngOnInit() {
   }
 
   registerOnChange(fn: any): void {
@@ -49,7 +54,36 @@ export class AddressComponent implements OnInit, ControlValueAccessor, Validator
   registerOnTouched(fn: any): void {
   }
 
-  writeValue(obj: any): void {
-    obj && this.form.setValue(obj, {emitEvent: false});
+  setDisabledState(isDisabled: boolean): void {
+  }
+
+  writeValue(val: Address): void {
+    val && this.form.setValue(val, {emitEvent: false});
+  }
+
+  registerOnValidatorChange(fn: () => void): void {
+  }
+
+  ngOnInit(): void {
+    this.form = new FormGroup({
+      street: new FormControl('', {validators: Validators.required}),
+      zipCode: new FormControl('', {validators: Validators.required}),
+      city: new FormControl('', {validators: Validators.required}),
+    });
+  }
+
+  validate(control: AbstractControl): ValidationErrors | null {
+    return this.form.valid ? null : {invalidForm: {valid: false, message: 'address form is invalid'}};
+  }
+
+  ngOnChanges(changes: SimpleChanges): void {
+    const submitted: SimpleChange = changes.isParentSubmitted;
+    this.isParentSubmitted = submitted.currentValue;
+    if (this.isParentSubmitted) {
+      this.form.markAllAsTouched();
+    } else if (this.form) {
+      // reset form if submitted gets changed back to false
+      this.form.reset();
+    }
   }
 }

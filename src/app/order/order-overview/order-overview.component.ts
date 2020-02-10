@@ -16,7 +16,7 @@ export class OrderOverviewComponent implements OnInit {
 
   ngOnInit() {
     this.form = new FormGroup({
-      address: new FormControl()
+      address: new FormControl(),
     });
   }
 
