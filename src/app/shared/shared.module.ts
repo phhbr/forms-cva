@@ -17,6 +17,7 @@ import {RouterModule} from '@angular/router';
 import {BookService} from '@book/book.service';
 import {ReactiveFormsModule} from '@angular/forms';
 import {BookGenresService} from '@book/book-genres.service';
+import { CustomizedSelectBoxComponent } from './customized-select-box/customized-select-box.component';
 
 @NgModule({
   imports: [
@@ -31,10 +32,11 @@ import {BookGenresService} from '@book/book-genres.service';
     MatInputModule,
     ReactiveFormsModule,
   ],
-  declarations: [ToolbarComponent, NavigationComponent, HomeComponent],
+  declarations: [ToolbarComponent, NavigationComponent, HomeComponent, CustomizedSelectBoxComponent],
   exports: [
     CommonModule,
     ToolbarComponent,
+    CustomizedSelectBoxComponent,
     NavigationComponent,
     MatToolbarModule,
     MatSidenavModule,
