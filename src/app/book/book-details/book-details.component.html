@@ -33,7 +33,7 @@
     </mat-form-field>
   </div>
   <div class="form-group row">
-    <app-customized-select-box [items]="(genres$ | async)">
+    <app-customized-select-box [items]="(genres$ | async)" formControlName="genre">
     </app-customized-select-box>
   </div>
   <div class="form-group row">

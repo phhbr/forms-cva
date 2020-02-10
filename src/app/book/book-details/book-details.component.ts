@@ -1,6 +1,6 @@
 import {BookService} from './../book.service';
 import {Component, OnInit} from '@angular/core';
-import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
+import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {ActivatedRoute, Router} from '@angular/router';
 import {Book} from '../book';
 import {Genre} from '@book/genre';
@@ -34,6 +34,7 @@ export class BookDetailsComponent implements OnInit {
       author: ['', [Validators.required, Validators.maxLength(20)]],
       title: ['', [Validators.required, Validators.maxLength(50)]],
       isbn: ['', [Validators.required, Validators.maxLength(13), Validators.pattern('[0-9]*')]],
+      genre: ['']
     });
 
     this.route.data.subscribe((data: { book: Book }) => {
@@ -46,6 +47,7 @@ export class BookDetailsComponent implements OnInit {
 
   apply(): void {
     this.submitted = true;
+    console.log(this.bookForm.value);
     if (this.bookForm.valid) {
       this.book = this.bookForm.value;
       this.bookService.save(this.book).subscribe(() => {

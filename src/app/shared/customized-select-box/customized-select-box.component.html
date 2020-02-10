@@ -1,6 +1,8 @@
 <label>
   Genre
-  <select>
-    <option *ngFor="let item of items">        {{item.name}}      </option>
+  <select [formControl]="form" name="genre">
+    <option *ngFor="let item of items" [ngValue]="item.id">
+      {{item.name}}
+    </option>
   </select>
 </label>
