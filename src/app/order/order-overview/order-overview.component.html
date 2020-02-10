@@ -1,6 +1,11 @@
-<h1>Orders</h1>
-<form [formGroup]="form" (ngSubmit)="onFormSubmitted()">
+<form [formGroup]="form" (submit)="apply()" [class.ng-submit]="submitted">
   <app-general-info></app-general-info>
-  <button type="submit">Apply</button>
-  <button type="button" (click)="onCancelClicked()">Cancel</button>
+  <div class="form-group row">
+    <button mat-raised-button color="primary" type="submit">Apply</button>
+    <button mat-stroked-button color="warn" type="button">Cancel</button>
+  </div>
+
+  <div *ngIf="submitted && form.valid" style="color: green; font-size: xx-large">
+    save success!
+  </div>
 </form>

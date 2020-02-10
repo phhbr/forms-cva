@@ -7,22 +7,29 @@ import {FormGroup, FormGroupDirective} from '@angular/forms';
   styleUrls: ['./order-overview.component.scss']
 })
 export class OrderOverviewComponent implements OnInit {
-  form: FormGroup = new FormGroup({});
   @ViewChild(FormGroupDirective, {static: false}) formDirective: FormGroupDirective;
-  private formSubmitted: boolean;
+  form: FormGroup;
+  submitted: boolean;
 
   constructor() {
   }
 
   ngOnInit() {
+    this.form = new FormGroup({});
   }
 
-  onFormSubmitted() {
-    console.log(this.form);
-    this.formSubmitted = this.form.valid;
+  apply(): void {
+    this.submitted = true;
+    if (this.form.valid) {
+      console.log('saved!');
+      console.log(this.form.getRawValue());
+
+      setTimeout(() => this.resetForm(), 5000);
+    }
   }
 
-  onCancelClicked() {
-
+  private resetForm(): void {
+    this.submitted = false;
+    this.formDirective.resetForm();
   }
 }
