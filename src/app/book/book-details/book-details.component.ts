@@ -3,9 +3,7 @@ import {Component, OnInit} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {ActivatedRoute, Router} from '@angular/router';
 import {Book} from '../book';
-import {Genre} from '@book/genre';
-import {BookGenresService} from '@book/book-genres.service';
-import {Observable} from 'rxjs';
+import {Genre} from '../genre';
 
 @Component({
   selector: 'app-book-details',
@@ -16,16 +14,15 @@ export class BookDetailsComponent implements OnInit {
   book: Book;
   submitted: boolean;
   bookForm: FormGroup;
-  genres$: Observable<Genre[]> = this.genresService.getGenres();
+  genres: Genre[];
 
   constructor(
     private formBuilder: FormBuilder,
     private bookService: BookService,
-    private genresService: BookGenresService,
     private router: Router,
     private route: ActivatedRoute
   ) {
-    this.book = new Book();
+    this.book = {title: null, genre: null, isbn: null, id: null, author: null};
   }
 
   ngOnInit() {
@@ -33,21 +30,33 @@ export class BookDetailsComponent implements OnInit {
       id: [''],
       author: ['', [Validators.required, Validators.maxLength(20)]],
       title: ['', [Validators.required, Validators.maxLength(50)]],
-      isbn: ['', [Validators.required, Validators.maxLength(13), Validators.pattern('[0-9]*')]],
-      genre: ['']
+      isbn: [
+        '',
+        [
+          Validators.required,
+          Validators.maxLength(13),
+          Validators.pattern('[0-9]*')
+        ]
+      ],
+      genre: ['', Validators.required],
     });
 
-    this.route.data.subscribe((data: { book: Book }) => {
+    this.route.data.subscribe((data: { book: Book, bookGenres: Genre[] }) => {
       if (data.book) {
         this.book = data.book;
       }
+
+      debugger;
+      if (data.bookGenres) {
+        this.genres = data.bookGenres;
+      }
+
       this.bookForm.setValue(this.book);
     });
   }
 
   apply(): void {
     this.submitted = true;
-    console.log(this.bookForm.value);
     if (this.bookForm.valid) {
       this.book = this.bookForm.value;
       this.bookService.save(this.book).subscribe(() => {

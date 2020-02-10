@@ -3,6 +3,7 @@ import {HomeComponent} from '../home/home.component';
 import {Routes} from '@angular/router';
 import {BookOverviewComponent} from '@book/book-overview/book-overview.component';
 import {BookDetailsResolver} from '@book/book-details/book-details.resolver';
+import {BookGenresResolver} from '@book/book-details/book-genres.resolver';
 
 export const routes: Routes = [
   {
@@ -18,11 +19,12 @@ export const routes: Routes = [
     component: BookDetailsComponent,
     resolve: {
       book: BookDetailsResolver,
+      bookGenres: BookGenresResolver
     }
   },
   {
     path: 'book',
-    component: BookDetailsComponent,
+    component: BookDetailsComponent
   },
   {path: '', redirectTo: '/home', pathMatch: 'full'}
 ];

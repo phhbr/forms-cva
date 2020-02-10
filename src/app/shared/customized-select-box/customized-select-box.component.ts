@@ -1,42 +1,70 @@
-import {Component, forwardRef, Input, OnInit} from '@angular/core';
-import {ControlValueAccessor, FormControl, NG_VALUE_ACCESSOR} from '@angular/forms';
+import {Component, forwardRef, Input, OnInit, ViewChild} from '@angular/core';
+import {ControlValueAccessor, NG_VALUE_ACCESSOR} from '@angular/forms';
+import {MatSelect} from '@angular/material';
 
 export interface SelectBoxItem {
-  name: string;
   id: number;
+  name: string;
+  icon: string;
 }
 
 @Component({
   selector: 'app-customized-select-box',
   templateUrl: './customized-select-box.component.html',
   styleUrls: ['./customized-select-box.component.scss'],
-  providers: [{
-    provide: NG_VALUE_ACCESSOR,
-    useExisting: forwardRef(() => CustomizedSelectBoxComponent),
-    multi: true
-  }]
+  providers: [
+    {
+      provide: NG_VALUE_ACCESSOR,
+      useExisting: forwardRef(() => CustomizedSelectBoxComponent),
+      multi: true
+    }
+  ]
 })
 export class CustomizedSelectBoxComponent implements OnInit, ControlValueAccessor {
-
+  @Input() placeholder: string;
   @Input() items: SelectBoxItem[] = [];
-  form: FormControl = new FormControl();
+
+  @ViewChild(MatSelect, {static: true}) matSelect: MatSelect;
+
+  selected: any;
 
   constructor() {
   }
 
-  ngOnInit() {
+  onChange = (_: any) => {
+  };
 
+  ngOnInit(): void {
   }
 
-  registerOnChange(fn: any): void {
-    this.form.valueChanges.subscribe((change) => fn(change));
+  registerOnChange(fn: (_: any) => void): void {
+    this.onChange = fn;
   }
 
   registerOnTouched(fn: any): void {
   }
 
-  writeValue(obj: SelectBoxItem): void {
-    console.log(obj);
-    this.form.setValue(obj);
+  setDisabledState(isDisabled: boolean): void {
+  }
+
+  writeValue(obj: any): void {
+    this.matSelect.value = obj;
+    this.setSelectedIfDefined();
+  }
+
+  onSelectionChange() {
+    this.setSelectedIfDefined();
+    this.onChange(this.matSelect.value);
+  }
+
+  private setSelectedIfDefined() {
+    const option = this.findById(this.matSelect.value);
+    if (option) {
+      this.selected = option.name;
+    }
+  }
+
+  private findById(id: number): SelectBoxItem {
+    return this.items.find(option => option.id === id);
   }
 }

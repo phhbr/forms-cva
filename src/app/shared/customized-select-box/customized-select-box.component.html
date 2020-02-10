@@ -1,8 +1,9 @@
-<label>
-  Genre
-  <select [formControl]="form" name="genre">
-    <option *ngFor="let item of items" [ngValue]="item.id">
-      {{item.name}}
-    </option>
-  </select>
-</label>
+<mat-form-field>
+  <mat-select placeholder={{placeholder}} (selectionChange)="onSelectionChange()">
+    <mat-select-trigger>{{selected}}</mat-select-trigger>
+    <mat-option *ngFor="let selectBoxItem of items" [value]="selectBoxItem.id">
+      <mat-icon>{{selectBoxItem.icon}}</mat-icon>
+      {{selectBoxItem.name}}
+    </mat-option>
+  </mat-select>
+</mat-form-field>
