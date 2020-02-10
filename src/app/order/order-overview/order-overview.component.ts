@@ -1,5 +1,5 @@
 import {Component, OnInit, ViewChild} from '@angular/core';
-import {FormGroup, FormGroupDirective} from '@angular/forms';
+import {FormControl, FormGroup, FormGroupDirective} from '@angular/forms';
 
 @Component({
   selector: 'app-order-overview',
@@ -15,14 +15,17 @@ export class OrderOverviewComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.form = new FormGroup({});
+    this.form = new FormGroup({
+      address: new FormControl()
+    });
   }
 
   apply(): void {
+    console.log(this.form.getRawValue());
+
     this.submitted = true;
     if (this.form.valid) {
       console.log('saved!');
-      console.log(this.form.getRawValue());
 
       setTimeout(() => this.resetForm(), 5000);
     }
