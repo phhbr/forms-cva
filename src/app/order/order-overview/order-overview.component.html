@@ -1,0 +1,6 @@
+<h1>Orders</h1>
+<form [formGroup]="form" (ngSubmit)="onFormSubmitted()">
+  <app-general-info></app-general-info>
+  <button type="submit">Apply</button>
+  <button type="button" (click)="onCancelClicked()">Cancel</button>
+</form>
