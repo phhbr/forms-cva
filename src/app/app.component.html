@@ -5,6 +5,23 @@
       <app-navigation></app-navigation>
     </mat-sidenav>
     <mat-sidenav-content class="app-main-content">
+      <section>
+        <h4>Template driven</h4>
+        <app-customized-select-box [items]="items$|async" [(ngModel)]="dropdownvalue"></app-customized-select-box>
+        <p>Value: {{dropdownvalue}}</p>
+      </section>
+      <section>
+        <h4>reactive forms: formControl object</h4>
+        <app-customized-select-box [items]="items$|async" [formControl]="form"></app-customized-select-box>
+        <p>Value: {{form.value}}</p>
+      </section>
+      <section>
+        <h4>reactive forms: formControl name</h4>
+        <form [formGroup]="formGroup">
+          <app-customized-select-box [items]="items$|async" formControlName="formgroup"></app-customized-select-box>
+          <p>Value: {{formGroup.get('formgroup').value}}</p>
+        </form>
+      </section>
       <router-outlet></router-outlet>
     </mat-sidenav-content>
   </mat-sidenav-container>

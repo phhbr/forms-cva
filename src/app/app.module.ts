@@ -9,6 +9,7 @@ import {routes} from '@shared/routes/routes';
 import {BookModule} from '@book/book.module';
 import {HttpClientModule} from '@angular/common/http';
 import {OrderModule} from './order/order.module';
+import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 
 @NgModule({
   declarations: [AppComponent],
@@ -20,7 +21,9 @@ import {OrderModule} from './order/order.module';
     RouterModule.forRoot(routes),
     // feature modules
     BookModule,
-    OrderModule
+    OrderModule,
+    FormsModule,
+    ReactiveFormsModule
   ],
   providers: [],
   bootstrap: [AppComponent]

@@ -65,6 +65,6 @@ export class CustomizedSelectBoxComponent implements OnInit, ControlValueAccesso
   }
 
   private findById(id: number): SelectBoxItem {
-    return this.items.find(option => option.id === id);
+    return this.items && this.items.find(option => option.id === id);
   }
 }
